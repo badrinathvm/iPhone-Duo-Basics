@@ -1,0 +1,626 @@
+<title>Split Pane Designs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F3F3F9;
+  --surface: #FFFFFF;
+  --surface-2: #F7F7FC;
+  --ink: #15152B;
+  --ink-2: #55556E;
+  --ink-3: #85859E;
+  --line: #E1E1EE;
+  --accent: #5856D6;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E9E8FB;
+  --screen: #FFFFFF;
+  --teal: #2FA5B6;
+  --teal-a: #6DD6E2;
+  --teal-b: #55BCCB;
+  --ind: #5B52E8;
+  --ind-a: #8781F8;
+  --ind-b: #5B52E8;
+  --st-good: #248A45;
+  --st-warn: #B86A00;
+  --shadow: 0 1px 2px rgba(20, 20, 60, .05), 0 10px 28px rgba(20, 20, 60, .06);
+  --display: "Bricolage Grotesque", "Avenir Next", "Helvetica Neue", sans-serif;
+  --body: "DM Sans", -apple-system, "Helvetica Neue", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --ui: -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "SF Pro Display", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C0C14;
+    --surface: #161622;
+    --surface-2: #1C1C2B;
+    --ink: #EEEEFA;
+    --ink-2: #A9A9C4;
+    --ink-3: #7A7A96;
+    --line: #2A2A3D;
+    --accent: #8E8CFF;
+    --accent-ink: #0C0C14;
+    --accent-soft: #25254A;
+    --screen: #0F0F19;
+    --teal: #4CC2D2;
+    --ind: #8E88FF;
+    --st-good: #2FA35A;
+    --st-warn: #D98A0F;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px rgba(0, 0, 0, .35);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C0C14;
+  --surface: #161622;
+  --surface-2: #1C1C2B;
+  --ink: #EEEEFA;
+  --ink-2: #A9A9C4;
+  --ink-3: #7A7A96;
+  --line: #2A2A3D;
+  --accent: #8E8CFF;
+  --accent-ink: #0C0C14;
+  --accent-soft: #25254A;
+  --screen: #0F0F19;
+  --teal: #4CC2D2;
+  --ind: #8E88FF;
+  --st-good: #2FA35A;
+  --st-warn: #D98A0F;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px rgba(0, 0, 0, .35);
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.55;
+  padding-inline: 16px;
+  padding-block: 28px 64px;
+}
+.wrap { max-width: 1240px; margin-inline: auto; }
+h1, h2, h3, h4 { font-family: var(--display); text-wrap: balance; letter-spacing: -0.015em; margin: 0; }
+h1 { font-size: clamp(30px, 5.2vw, 46px); font-weight: 800; line-height: 1.05; letter-spacing: -0.025em; }
+h2 { font-size: clamp(22px, 3.2vw, 28px); font-weight: 700; }
+h3 { font-size: 19px; font-weight: 700; }
+p { margin: 0; }
+code, .mono { font-family: var(--mono); font-size: .86em; }
+code { background: var(--accent-soft); color: var(--ink); padding: 1px 6px; border-radius: 6px; }
+.eyebrow { font-size: 12px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+.intro { display: grid; gap: 14px; max-width: 68ch; }
+.intro p { color: var(--ink-2); }
+.note { font-size: 13px; color: var(--ink-2); }
+.note b { color: var(--ink); font-weight: 600; }
+.ico { width: 1.25em; height: 1.25em; flex: none; }
+
+/* control bar */
+.bar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 30;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px;
+  margin-block: 22px 26px;
+  padding: 12px 16px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+.bar .lab { font-weight: 600; font-size: 13px; }
+.seg { display: inline-flex; padding: 3px; gap: 2px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; }
+.seg button {
+  font: inherit; font-weight: 600; font-size: 13px; cursor: pointer;
+  padding: 6px 14px; border-radius: 999px; border: 0; background: transparent; color: var(--ink-2);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.seg button[aria-checked="true"] { background: var(--accent); color: var(--accent-ink); }
+.bar input[type="range"] { flex: 1 1 200px; min-width: 0; accent-color: var(--accent); height: 28px; }
+.bar output { font-family: var(--mono); font-weight: 500; min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; }
+.split-read { font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.split-read b { color: var(--ink); font-weight: 600; }
+button:focus-visible, input:focus-visible, .handle:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* option cards */
+.opts { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); }
+.opt {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+  padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow); min-width: 0;
+}
+.opt.rec { border-color: var(--accent); }
+.opt-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.letter {
+  width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+  background: var(--accent); color: var(--accent-ink); font: 800 15px var(--display);
+}
+.tag { font-size: 12px; font-weight: 600; color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--line); padding: 2px 9px; border-radius: 999px; }
+.tag.rec { background: var(--accent-soft); color: var(--ink); border-color: transparent; }
+.meta { display: grid; gap: 8px; margin: 0; font-size: 13.5px; }
+.meta > div { display: grid; grid-template-columns: 72px 1fr; gap: 10px; }
+.meta dt { color: var(--ink-3); font-size: 12px; text-transform: uppercase; letter-spacing: .07em; font-weight: 600; padding-top: 2px; }
+.meta dd { margin: 0; color: var(--ink-2); }
+.effort { display: inline-flex; gap: 3px; vertical-align: middle; margin-right: 8px; }
+.effort i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+.effort i.on { background: var(--accent); }
+.verdict { display: grid; gap: 4px; font-size: 13.5px; padding-top: 12px; border-top: 1px solid var(--line); }
+.verdict span { display: flex; gap: 8px; }
+.verdict b { flex: none; width: 1.1em; font-weight: 700; }
+.verdict .pro b { color: var(--st-good); }
+.verdict .con b { color: var(--st-warn); }
+
+/* --- device + split machinery --- */
+.dev { position: relative; width: 100%; aspect-ratio: 4 / 3; background: #12121B; border-radius: 28px; padding: 8px; box-shadow: inset 0 0 0 1.5px #2C2C3B; font-family: var(--ui); }
+[data-axis="vertical"] .dev { aspect-ratio: 1 / 1; }
+.dev-screen { position: relative; height: 100%; background: var(--screen); border-radius: 21px; overflow: hidden; }
+.fold { position: absolute; inset: 0; display: flex; }
+[data-axis="vertical"] .fold { flex-direction: column; }
+.pane {
+  position: relative; margin: 6px; min-width: 0; min-height: 0; border-radius: 20px; overflow: hidden;
+  flex-basis: 0; container-type: size; container-name: pane;
+}
+.pane.p { flex-grow: var(--r); }
+.pane.s { flex-grow: calc(1 - var(--r)); }
+.chip {
+  display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
+  font: 500 11px var(--mono); padding: 3px 9px; border-radius: 999px; background: rgba(255, 255, 255, .22); color: #fff;
+}
+.chip b { font-weight: 500; }
+.pane h4 { font: 700 17px var(--ui); letter-spacing: -0.01em; }
+
+/* A: role cards */
+.a-pane { color: #fff; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
+.a-teal { background: linear-gradient(180deg, var(--teal-a), var(--teal-b)); }
+.a-ind { background: linear-gradient(180deg, var(--ind-a), var(--ind-b)); }
+.a-head { display: flex; align-items: center; gap: 8px; }
+.a-head .ico { width: 22px; height: 22px; }
+.a-role { font: 600 10.5px var(--ui); letter-spacing: .08em; text-transform: uppercase; opacity: .8; }
+.a-body { display: grid; gap: 6px; align-content: start; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.a-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 10px; background: rgba(255, 255, 255, .14); }
+.a-row i { width: 13px; height: 13px; border-radius: 50%; background: rgba(255, 255, 255, .6); flex: none; }
+.a-row b { flex: 1; height: 7px; border-radius: 4px; background: rgba(255, 255, 255, .55); }
+.a-row.sel { background: rgba(255, 255, 255, .34); }
+.a-hero { height: 44px; border-radius: 10px; background: rgba(255, 255, 255, .22); position: relative; overflow: hidden; flex: none; }
+.a-hero::before { content: ""; position: absolute; left: 12%; bottom: -10px; width: 46%; height: 34px; background: rgba(255, 255, 255, .4); border-radius: 50% 50% 0 0; }
+.a-hero::after { content: ""; position: absolute; right: 14%; top: 9px; width: 11px; height: 11px; border-radius: 50%; background: rgba(255, 255, 255, .75); }
+.a-line { height: 7px; border-radius: 4px; background: rgba(255, 255, 255, .5); }
+.a-foot { display: flex; gap: 6px; flex-wrap: wrap; }
+@container pane (max-height: 200px) { .a-body { display: none; } }
+@container pane (max-height: 120px) { .a-foot { display: none; } .a-role { display: none; } }
+@container pane (max-width: 170px) { .a-foot .ax { display: none; } }
+
+/* B: blueprint */
+.b-screen { background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 22px 22px; background-position: -1px -1px; }
+.fold.b { padding: 34px 0 0 0; }
+[data-axis="vertical"] .fold.b { padding: 0 0 0 34px; }
+.b-pane { background: color-mix(in srgb, var(--c) 11%, var(--screen)); border: 1.5px dashed var(--c); color: var(--ink); padding: 10px; display: flex; flex-direction: column; justify-content: space-between; --c: var(--teal); }
+.b-pane.s { --c: var(--ind); }
+.b-role { font: 600 11px var(--mono); letter-spacing: .06em; color: var(--c); text-transform: uppercase; }
+.b-dim { font: 500 11px var(--mono); color: var(--ink-2); display: grid; gap: 4px; justify-items: center; text-align: center; }
+.b-dimline { position: relative; width: 100%; height: 0; border-top: 1.5px solid var(--c); }
+.b-dimline::before, .b-dimline::after { content: ""; position: absolute; top: -5px; width: 1.5px; height: 9px; background: var(--c); }
+.b-dimline::before { left: 0; } .b-dimline::after { right: 0; }
+[data-axis="vertical"] .b-dim.v { }
+.b-ruler { position: absolute; top: 6px; left: 0; right: 0; height: 22px; display: flex; }
+[data-axis="vertical"] .b-ruler { top: 0; bottom: 0; left: 6px; right: auto; height: auto; width: 22px; flex-direction: column; }
+.b-seg { margin: 0 6px; border-radius: 6px; display: grid; place-items: center; font: 500 11px var(--mono); color: #fff; flex-basis: 0; min-width: 0; min-height: 0; overflow: hidden; }
+[data-axis="vertical"] .b-seg { margin: 6px 0; }
+.b-seg.p { background: var(--teal); flex-grow: var(--r); }
+.b-seg.s { background: var(--ind); flex-grow: calc(1 - var(--r)); }
+[data-axis="vertical"] .b-seg span { writing-mode: vertical-rl; }
+.b-lim { position: absolute; background: var(--ink-3); opacity: .7; }
+.b-lim.h { top: 26px; width: 1.5px; height: 6px; }
+.b-lim.h.lo { left: calc(6px + .2 * (100% - 24px)); }
+.b-lim.h.hi { left: calc(6px + .8 * (100% - 24px)); }
+[data-axis="vertical"] .b-lim.h { display: none; }
+.b-lim.v { display: none; left: 28px; height: 1.5px; width: 6px; }
+[data-axis="vertical"] .b-lim.v { display: block; }
+[data-axis="vertical"] .b-lim.v.lo { top: calc(6px + .2 * (100% - 24px)); }
+[data-axis="vertical"] .b-lim.v.hi { top: calc(6px + .8 * (100% - 24px)); }
+.b-axis { position: absolute; right: 12px; bottom: 10px; display: inline-flex; align-items: center; gap: 6px; font: 500 11px var(--mono); color: var(--ink-2); background: var(--screen); padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); z-index: 2; }
+.b-axis .ico { width: 14px; height: 14px; }
+.b-axis .v { display: none; }
+[data-axis="vertical"] .b-axis .h { display: none; }
+[data-axis="vertical"] .b-axis .v { display: block; }
+@container pane (max-height: 110px) { .b-dim { display: none; } }
+
+/* C: mail */
+.c-pane { background: var(--surface-2); border: 1px solid var(--line); color: var(--ink); display: flex; flex-direction: column; }
+.c-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+.c-top h4 { font-size: 14px; }
+.c-top .role { font: 600 10px var(--ui); letter-spacing: .08em; text-transform: uppercase; }
+.c-pane.p .role { color: var(--teal); }
+.c-pane.s .role { color: var(--ind); }
+.c-list { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.c-row { display: flex; align-items: center; gap: 9px; padding: 8px 12px; border: 0; background: transparent; text-align: left; color: inherit; font: inherit; cursor: pointer; width: 100%; border-bottom: 1px solid var(--line); }
+.c-row[aria-selected="true"] { background: color-mix(in srgb, var(--teal) 16%, transparent); }
+.c-av { width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center; color: #fff; font: 700 11px var(--ui); }
+.c-txt { min-width: 0; display: grid; }
+.c-txt b { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.c-txt span { font-size: 11.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.c-read { padding: 12px; display: grid; gap: 8px; align-content: start; min-height: 0; overflow: hidden; }
+.c-read h5 { margin: 0; font: 700 15px var(--ui); letter-spacing: -0.01em; }
+.c-from { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-2); }
+.c-read p { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+.c-att { justify-self: start; display: inline-flex; align-items: center; gap: 6px; font: 500 11px var(--mono); padding: 3px 9px; border-radius: 8px; background: color-mix(in srgb, var(--ind) 14%, transparent); color: var(--ink); }
+@container pane (max-width: 190px) { .c-txt { display: none; } .c-row { justify-content: center; padding-inline: 6px; } .c-top .role { display: none; } }
+@container pane (max-height: 130px) { .c-list .c-row:nth-child(n+2) { display: none; } .c-read p, .c-att { display: none; } }
+
+/* D: seam handle */
+.d-pane { color: #fff; display: grid; place-items: center; align-content: center; gap: 2px; text-align: center; padding: 10px; }
+.d-pane.p { background: linear-gradient(180deg, var(--teal-a), var(--teal-b)); }
+.d-pane.s { background: linear-gradient(180deg, var(--ind-a), var(--ind-b)); }
+.d-role { font: 600 11px var(--ui); letter-spacing: .09em; text-transform: uppercase; opacity: .85; }
+.d-num { font: 800 clamp(26px, 24cqmin, 68px) var(--ui); line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.d-num small { font-size: .45em; font-weight: 700; margin-left: 2px; opacity: .85; }
+@container pane (max-height: 90px) { .d-role { display: none; } }
+.handle {
+  position: absolute; z-index: 5; cursor: ew-resize; touch-action: none;
+  left: var(--seam, 50%); top: 50%; transform: translate(-50%, -50%);
+  width: 14px; height: 64px; border-radius: 999px; display: grid; place-items: center;
+  background: var(--surface); box-shadow: 0 2px 10px rgba(0, 0, 0, .28), 0 0 0 1px rgba(0, 0, 0, .06);
+}
+[data-axis="vertical"] .handle { left: 50%; top: var(--seam, 50%); width: 64px; height: 14px; cursor: ns-resize; }
+.grip { width: 3px; height: 26px; border-radius: 2px; background: repeating-linear-gradient(180deg, var(--ink-3) 0 3px, transparent 3px 6px); }
+[data-axis="vertical"] .grip { width: 26px; height: 3px; background: repeating-linear-gradient(90deg, var(--ink-3) 0 3px, transparent 3px 6px); }
+.bubble { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); white-space: nowrap; font: 600 11px var(--mono); background: var(--ink); color: var(--screen); padding: 2px 8px; border-radius: 999px; }
+[data-axis="vertical"] .bubble { bottom: auto; left: calc(100% + 8px); top: 50%; transform: translateY(-50%); }
+.hint { font-size: 12px; color: var(--ink-3); text-align: center; }
+
+/* E: layout map */
+.e-pane { --c: var(--teal); background: color-mix(in srgb, var(--c) 13%, var(--screen)); color: var(--ink); padding: 12px; display: flex; flex-direction: column; gap: 10px; border: 1px solid color-mix(in srgb, var(--c) 40%, transparent); }
+.e-pane.s { --c: var(--ind); }
+.e-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.e-head h4 { font-size: 15px; color: var(--c); }
+.map { display: flex; gap: 2px; width: 34px; height: 24px; flex: none; }
+[data-axis="vertical"] .map { flex-direction: column; }
+.map i { flex-basis: 0; border-radius: 3px; border: 1.5px solid var(--c); }
+.map .m1 { flex-grow: var(--r); }
+.map .m2 { flex-grow: calc(1 - var(--r)); }
+.map i.mine { background: var(--c); }
+.e-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.e-chips .chip { background: color-mix(in srgb, var(--c) 18%, transparent); color: var(--ink); }
+.e-body { display: flex; flex-direction: column; gap: 6px; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+[data-axis="vertical"] .e-body { flex-direction: row; }
+.e-item { display: flex; align-items: center; gap: 7px; padding: 6px 8px; border-radius: 9px; background: color-mix(in srgb, var(--c) 16%, transparent); flex: none; }
+[data-axis="vertical"] .e-item { flex: 1 1 0; min-width: 0; }
+.e-item i { width: 11px; height: 11px; border-radius: 50%; background: var(--c); flex: none; }
+.e-item b { flex: 1; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--c) 55%, transparent); }
+.e-hero { border-radius: 10px; background: color-mix(in srgb, var(--c) 30%, transparent); flex: 0 0 46px; }
+[data-axis="vertical"] .e-hero { flex: 0 0 34%; }
+.e-lines { display: grid; gap: 6px; align-content: start; flex: 1; }
+.e-lines b { height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--c) 50%, transparent); }
+@container pane (max-height: 150px) { .e-chips { display: none; } }
+@container pane (max-height: 78px) { .e-body { display: none; } }
+
+/* F: glass aurora */
+.f-screen {
+  background:
+    radial-gradient(60% 70% at 15% 20%, #4FD1E0 0%, transparent 60%),
+    radial-gradient(55% 65% at 85% 25%, #7C6CFF 0%, transparent 62%),
+    radial-gradient(60% 60% at 70% 90%, #FF8FB1 0%, transparent 60%),
+    radial-gradient(50% 55% at 20% 95%, #FFC46B 0%, transparent 60%),
+    #1B1B34;
+}
+.f-pane {
+  color: #fff; display: grid; place-items: center; align-content: center; gap: 10px; text-align: center; padding: 12px;
+  background: rgba(255, 255, 255, .17); backdrop-filter: blur(22px) saturate(1.5); -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, .38); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 8px 24px rgba(0, 0, 0, .16); border-radius: 26px;
+}
+.f-orb { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .24); border: 1px solid rgba(255, 255, 255, .45); }
+.f-orb .ico { width: 24px; height: 24px; }
+.f-pane h4 { font: 600 20px var(--ui); letter-spacing: -0.015em; }
+.f-pane .chip { background: rgba(255, 255, 255, .22); border: 1px solid rgba(255, 255, 255, .3); }
+.f-glow { position: absolute; z-index: 1; pointer-events: none; left: var(--seam, 50%); top: 8%; bottom: 8%; width: 28px; transform: translateX(-50%); background: radial-gradient(closest-side, rgba(255, 255, 255, .55), transparent); filter: blur(6px); opacity: .55; }
+[data-axis="vertical"] .f-glow { left: 8%; right: 8%; top: var(--seam, 50%); bottom: auto; width: auto; height: 28px; transform: translateY(-50%); background: radial-gradient(closest-side, rgba(255, 255, 255, .55), transparent); }
+@container pane (max-height: 130px) { .f-orb { display: none; } .f-pane .chip { display: none; } }
+@container pane (max-height: 80px) { .f-pane h4 { font-size: 15px; } }
+
+/* lower sections */
+.wrap > section { margin-top: 56px; display: grid; gap: 14px; }
+.two { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 20px; display: grid; gap: 10px; align-content: start; }
+.card ul, .card ol { margin: 0; padding-left: 20px; color: var(--ink-2); display: grid; gap: 8px; }
+.card li::marker { color: var(--ink-3); }
+.card p { color: var(--ink-2); }
+.files { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.files li { display: grid; gap: 2px; }
+.fh { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; font-weight: 600; min-width: 0; }
+.fh code { overflow-wrap: anywhere; }
+.files span { color: var(--ink-2); font-size: 13.5px; }
+pre { margin: 0; overflow-x: auto; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; font: 400 12.5px/1.6 var(--mono); color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (max-width: 480px) { .meta > div { grid-template-columns: 1fr; gap: 2px; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-list" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="4.5" cy="6.5" r="1.7"/><circle cx="4.5" cy="12" r="1.7"/><circle cx="4.5" cy="17.5" r="1.7"/></g><path d="M9.5 6.5h11M9.5 12h11M9.5 17.5h11" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><rect x="4.5" y="2.5" width="15" height="19" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M8 7.5h3.2M13.6 7.5h2.4M8 11h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><rect x="8" y="14" width="8" height="4" rx="1.2" fill="currentColor"/></symbol>
+  <symbol id="i-axis-h" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-axis-v" viewBox="0 0 24 24"><path d="M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><path d="M8 12.5l6.2-6.2a3.2 3.2 0 014.5 4.5l-8 8a5 5 0 01-7-7l7.6-7.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+</svg>
+
+<div class="wrap" id="app" data-axis="horizontal" style="--r:.4">
+  <header class="intro">
+    <span class="eyebrow">iPhone Duo Basics · Split Arrangements</span>
+    <h1>Six ways to show Primary and Secondary</h1>
+    <p>Today the panes are two gradient cards with an icon and a name, and the ratio slider lives inside the primary one. Below are six directions that say more about what a split arrangement <em>is</em>. Change <b>Axes</b> or <b>Ratio</b> and every mockup responds, just as <code>.arrangementViewStyle(.split.axes(…))</code> and <code>.splitArrangementLayoutRatio(…)</code> do.</p>
+    <p class="note"><b>Nothing in the Swift project has changed.</b> Pick a letter and I'll build it.</p>
+  </header>
+
+  <div class="bar" role="group" aria-label="Preview controls">
+    <span class="lab" id="axes-l">Axes</span>
+    <div class="seg" role="radiogroup" aria-labelledby="axes-l">
+      <button type="button" role="radio" data-axis="horizontal" aria-checked="true"><svg class="ico" aria-hidden="true"><use href="#i-axis-h"/></svg>Horizontal</button>
+      <button type="button" role="radio" data-axis="vertical" aria-checked="false"><svg class="ico" aria-hidden="true"><use href="#i-axis-v"/></svg>Vertical</button>
+    </div>
+    <label class="lab" for="ratio">Ratio</label>
+    <input id="ratio" type="range" min="20" max="80" step="1" value="40">
+    <output id="ratio-out" for="ratio">40%</output>
+    <span class="split-read">Primary <b data-bind="rp">40</b>% · Secondary <b data-bind="rs">60</b>%</span>
+  </div>
+
+  <main class="opts">
+    <!-- A -->
+    <article class="opt rec" id="opt-a">
+      <div class="opt-head"><span class="letter">A</span><h3>Role Cards</h3><span class="tag rec">Recommended</span><span class="tag">Your cards, with a job</span></div>
+      <div class="dev"><div class="dev-screen"><div class="fold">
+        <section class="pane p a-pane a-teal" aria-label="Primary pane">
+          <div class="a-head"><svg class="ico" aria-hidden="true"><use href="#i-list"/></svg><div><h4>Primary</h4><span class="a-role">list · drives layout</span></div></div>
+          <div class="a-body"><div class="a-row sel"><i></i><b></b></div><div class="a-row"><i></i><b style="width:72%"></b></div><div class="a-row"><i></i><b style="width:88%"></b></div><div class="a-row"><i></i><b style="width:60%"></b></div></div>
+          <div class="a-foot"><span class="chip ax">axis: <b data-bind="ax">horizontal</b></span><span class="chip"><span><b data-bind="rp">40</b>%</span></span></div>
+        </section>
+        <section class="pane s a-pane a-ind" aria-label="Secondary pane">
+          <div class="a-head"><svg class="ico" aria-hidden="true"><use href="#i-doc"/></svg><div><h4>Secondary</h4><span class="a-role">detail · takes the rest</span></div></div>
+          <div class="a-body"><div class="a-hero"></div><div class="a-line" style="width:82%"></div><div class="a-line"></div><div class="a-line" style="width:64%"></div></div>
+          <div class="a-foot"><span class="chip ax">axis: <b data-bind="ax">horizontal</b></span><span class="chip"><span><b data-bind="rs">60</b>%</span></span></div>
+        </section>
+      </div></div></div>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>The same teal and indigo cards, but each pane hints at its role: a list skeleton in Primary, a document skeleton in Secondary, plus an axis chip and a live share pill.</dd></div>
+        <div><dt>Data</dt><dd><code>axes</code> and <code>ratio</code> from <code>SplitArrangementView</code>, passed down as plain values</dd></div>
+        <div><dt>SwiftUI</dt><dd>Two pane views inside the existing <code>ViewThatFits</code>, <code>RoundedRectangle</code> skeletons, chips as <code>.white.opacity(0.2)</code> capsules</dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span>Low–Medium</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Smallest change. Explains "primary vs. secondary" at a glance.</span><span class="con"><b>−</b>Still needs a new home for the ratio control.</span></div>
+    </article>
+
+    <!-- B -->
+    <article class="opt" id="opt-b">
+      <div class="opt-head"><span class="letter">B</span><h3>Blueprint</h3><span class="tag">Inspector</span></div>
+      <div class="dev"><div class="dev-screen b-screen">
+        <div class="b-ruler" aria-hidden="true"><div class="b-seg p"><span><b data-bind="rp">40</b>%</span></div><div class="b-seg s"><span><b data-bind="rs">60</b>%</span></div></div>
+        <span class="b-lim h lo"></span><span class="b-lim h hi"></span><span class="b-lim v lo"></span><span class="b-lim v hi"></span>
+        <div class="fold b">
+          <section class="pane p b-pane" aria-label="Primary pane"><span class="b-role">Primary</span><div class="b-dim"><div class="b-dimline"></div><span>ratio <b data-bind="rd">0.40</b> of <span data-bind="dim">width</span></span></div></section>
+          <section class="pane s b-pane" aria-label="Secondary pane"><span class="b-role">Secondary</span><div class="b-dim"><div class="b-dimline"></div><span>remaining <b data-bind="rdr">0.60</b></span></div></section>
+        </div>
+        <span class="b-axis"><svg class="ico h" aria-hidden="true"><use href="#i-axis-h"/></svg><svg class="ico v" aria-hidden="true"><use href="#i-axis-v"/></svg>axes: <span data-bind="ax">horizontal</span></span>
+      </div></div>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>Dashed outlines on a grid, a ratio ruler along the split axis with the 0.2 and 0.8 limits marked, dimension lines, and an axis arrow.</dd></div>
+        <div><dt>Data</dt><dd><code>axes</code>, <code>ratio</code>, the <code>0.2...0.8</code> range</dd></div>
+        <div><dt>SwiftUI</dt><dd>Dashed <code>StrokeStyle</code> overlays, a weighted <code>HStack</code>/<code>VStack</code> ruler, monospaced text</dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>Medium</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Teaches the API's numbers. Great for a docs-style sample.</span><span class="con"><b>−</b>Looks like a tool, not an app. Drops the friendly colours.</span></div>
+    </article>
+
+    <!-- C -->
+    <article class="opt" id="opt-c">
+      <div class="opt-head"><span class="letter">C</span><h3>Mail App</h3><span class="tag">Real master–detail</span></div>
+      <div class="dev"><div class="dev-screen"><div class="fold">
+        <section class="pane p c-pane" aria-label="Primary pane">
+          <div class="c-top"><h4>Inbox</h4><span class="role">Primary</span></div>
+          <div class="c-list" id="c-list" role="listbox" aria-label="Messages"></div>
+        </section>
+        <section class="pane s c-pane" aria-label="Secondary pane">
+          <div class="c-top"><h4>Message</h4><span class="role">Secondary</span></div>
+          <div class="c-read" id="c-read"></div>
+        </section>
+      </div></div></div>
+      <p class="hint">Tap a message. The Secondary pane follows.</p>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>An inbox list in Primary and a reading pane in Secondary. Rows collapse to avatars when the primary is narrow.</dd></div>
+        <div><dt>Data</dt><dd>Selection state, sample messages, <code>axes</code>, <code>ratio</code></dd></div>
+        <div><dt>SwiftUI</dt><dd><code>List(selection:)</code> and a detail <code>VStack</code>, with <code>ViewThatFits</code> for the avatar-only layout</dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span>High</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Shows the split in real use. Colour lives only in the headers.</span><span class="con"><b>−</b>A mini-app inside a "basics" sample. Needs sample data.</span></div>
+    </article>
+
+    <!-- D -->
+    <article class="opt" id="opt-d">
+      <div class="opt-head"><span class="letter">D</span><h3>Seam Handle</h3><span class="tag">Drag to resize</span></div>
+      <div class="dev"><div class="dev-screen"><div class="fold" data-seam="1" id="d-fold">
+        <section class="pane p d-pane" aria-label="Primary pane"><span class="d-role">Primary</span><strong class="d-num"><span data-bind="rp">40</span><small>%</small></strong></section>
+        <section class="pane s d-pane" aria-label="Secondary pane"><span class="d-role">Secondary</span><strong class="d-num"><span data-bind="rs">60</span><small>%</small></strong></section>
+        <div class="handle" id="d-handle" role="slider" tabindex="0" aria-label="Layout ratio" aria-valuemin="20" aria-valuemax="80" aria-valuenow="40"><span class="grip"></span><span class="bubble"><b data-bind="rp">40</b> / <b data-bind="rs">60</b></span></div>
+      </div></div></div>
+      <p class="hint">Drag the handle, or focus it and use the arrow keys.</p>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>Flat panes with the share as the hero number. The ratio slider is replaced by a handle sitting on the seam, so the control never moves under your finger.</dd></div>
+        <div><dt>Data</dt><dd><code>ratio</code> (two-way), <code>axes</code></dd></div>
+        <div><dt>SwiftUI</dt><dd><code>DragGesture</code> mapped through <code>GeometryReader</code>, <code>.numericText</code>, <code>.sensoryFeedback(.selection)</code></dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>Medium</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Fixes the in-pane slider problem directly. Very tactile.</span><span class="con"><b>−</b>Says little about what each pane is for.</span></div>
+    </article>
+
+    <!-- E -->
+    <article class="opt" id="opt-e">
+      <div class="opt-head"><span class="letter">E</span><h3>Layout Map</h3><span class="tag">Axis-aware</span></div>
+      <div class="dev"><div class="dev-screen"><div class="fold">
+        <section class="pane p e-pane" aria-label="Primary pane">
+          <div class="e-head"><h4>Primary</h4><div class="map" aria-hidden="true"><i class="m1 mine"></i><i class="m2"></i></div></div>
+          <div class="e-chips"><span class="chip">axis: <b data-bind="ax">horizontal</b></span><span class="chip">ratio <b data-bind="rd">0.40</b></span></div>
+          <div class="e-body"><div class="e-item"><i></i><b></b></div><div class="e-item"><i></i><b style="width:70%"></b></div><div class="e-item"><i></i><b style="width:85%"></b></div><div class="e-item"><i></i><b style="width:55%"></b></div></div>
+        </section>
+        <section class="pane s e-pane" aria-label="Secondary pane">
+          <div class="e-head"><h4>Secondary</h4><div class="map" aria-hidden="true"><i class="m1"></i><i class="m2 mine"></i></div></div>
+          <div class="e-chips"><span class="chip">axis: <b data-bind="ax">horizontal</b></span><span class="chip">left <b data-bind="rdr">0.60</b></span></div>
+          <div class="e-body"><div class="e-hero"></div><div class="e-lines"><b></b><b style="width:80%"></b><b style="width:60%"></b></div></div>
+        </section>
+      </div></div></div>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>A mini layout glyph in each pane highlights which half you're looking at. Content reflows with the axis: the list becomes a chip row, the image moves beside the text.</dd></div>
+        <div><dt>Data</dt><dd><code>axes</code>, <code>ratio</code></dd></div>
+        <div><dt>SwiftUI</dt><dd><code>if axes == .horizontal</code> swapping <code>VStack</code>/<code>HStack</code>, mini map from two <code>RoundedRectangle</code>s</dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>Medium</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Shows why <code>axes</code> matters: the content adapts.</span><span class="con"><b>−</b>Needs the axis passed in. Two layouts per pane to maintain.</span></div>
+    </article>
+
+    <!-- F -->
+    <article class="opt" id="opt-f">
+      <div class="opt-head"><span class="letter">F</span><h3>Glass Aurora</h3><span class="tag">Liquid Glass</span></div>
+      <div class="dev"><div class="dev-screen f-screen"><div class="fold" data-seam="1" id="f-fold">
+        <section class="pane p f-pane" aria-label="Primary pane"><div class="f-orb"><svg class="ico" aria-hidden="true"><use href="#i-list"/></svg></div><h4>Primary</h4><span class="chip">axis: <b data-bind="ax">horizontal</b></span></section>
+        <section class="pane s f-pane" aria-label="Secondary pane"><div class="f-orb"><svg class="ico" aria-hidden="true"><use href="#i-doc"/></svg></div><h4>Secondary</h4><span class="chip">axis: <b data-bind="ax">horizontal</b></span></section>
+        <div class="f-glow" aria-hidden="true"></div>
+      </div></div></div>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>Frosted panes over a colour aurora, a soft light along the seam, and minimal type. The bottom Axes picker already uses glass, so it matches.</dd></div>
+        <div><dt>Data</dt><dd><code>axes</code>, <code>ratio</code></dd></div>
+        <div><dt>SwiftUI</dt><dd><code>.glassEffect(in: .rect(cornerRadius: 28))</code> on each pane, a <code>MeshGradient</code> background</dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span>Low–Medium</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Most polished. Consistent with the glass control bar.</span><span class="con"><b>−</b>Pure style: it teaches nothing about the roles.</span></div>
+    </article>
+  </main>
+
+  <section aria-labelledby="obs-h">
+    <h2 id="obs-h">What I'd fix in the current design</h2>
+    <div class="card">
+      <ol>
+        <li><b>The ratio slider sits inside the primary pane.</b> The pane resizes while you drag the slider inside it, so the control slides away from your finger. Move it next to the Axes picker in the bottom glass bar, or onto the seam (D).</li>
+        <li><b><code>axis: nil</code> tells the reader nothing.</b> The chip code (<code>axisDescription</code>) is commented out in the current file, so the screenshot is from an earlier build. <code>SplitArrangementView</code> already holds <code>axes</code>; pass it down, or the real environment value if the SDK exposes one.</li>
+        <li><b>The panes are only an icon and a name.</b> A hint of role content (a list vs. a detail) makes "primary" and "secondary" mean something.</li>
+        <li><b>Keep the <code>ViewThatFits</code> icon fallback.</b> It is the right idea. The mockups above copy it: shrink a pane and the icon and extras drop away.</li>
+        <li><b>Small:</b> the catalog row title reads "Split Arrangments" in <code>Utils/DuoSections.swift</code>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="two" aria-labelledby="rec-h">
+    <div class="card">
+      <h2 id="rec-h">Recommendation</h2>
+      <p><b>A for the panes, plus D's seam handle for the ratio.</b> It stays close to what you have, explains the two roles, and removes the awkward in-pane slider. Fix the chip to show the real axis.</p>
+      <ul>
+        <li>B is a good fit if this sample doubles as API documentation.</li>
+        <li>E is worth borrowing from if you want the sample to show axis-aware content.</li>
+        <li>C is the richest but is a mini-app; F is polish you can layer on last.</li>
+      </ul>
+      <pre><code>// ratio moves to the seam; DragGesture maps x → 0.2…0.8
+.overlay(alignment: .leading) {
+  SeamHandle(ratio: $ratio, axes: axes)
+}</code></pre>
+    </div>
+    <div class="card">
+      <h2>What would change (for A + D)</h2>
+      <ul class="files">
+        <li><div class="fh"><code>View/SplitArrangementView.swift</code></div><span>Split <code>PaneView</code> into role-specific panes, pass <code>axes</code> down, drop the slider from the pane, and keep <code>.splitArrangementLayoutRatio(ratio)</code>.</span></li>
+        <li><div class="fh"><code>View/SeamHandle.swift</code> (new)</div><span>The draggable ratio handle with a percent bubble and selection haptics.</span></li>
+        <li><div class="fh"><code>Utils/DuoSections.swift</code></div><span>Fix the "Split Arrangments" typo.</span></li>
+        <li><div class="fh">Everything else</div><span>Unchanged: <code>Domain/</code>, <code>Actions/</code>, <code>Data/</code>, composers.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="ass-h">
+    <h2 id="ass-h">Assumptions to confirm</h2>
+    <div class="card">
+      <ul>
+        <li><code>splitArrangementLayoutRatio</code> is the <b>primary pane's share</b> of the split, clamped to 0.2–0.8 as in your slider. The mockups place the seam where the ratio puts it. The physical hinge position isn't modelled.</li>
+        <li>Horizontal axes mean side by side, and vertical means stacked, as in your screenshot.</li>
+        <li>Chips that show the axis assume the pane can be given <code>axes</code>. I don't know what the SDK exposes to a pane, and the screenshot's <code>axis: nil</code> suggests it may be nil.</li>
+        <li>These are HTML/CSS design targets, so SwiftUI rendering will differ in detail.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
+  var clamp = function (v, lo, hi) { return Math.min(hi, Math.max(lo, v)); };
+  var app = $('#app'), ratioEl = $('#ratio');
+  var state = { axis: 'horizontal', ratio: 40 };
+
+  // C: sample messages, plainly example content
+  var mails = [
+    { n: 'Maya Chen', i: 'MC', c: '#2FA5B6', s: 'Hinge angle demo notes', p: 'Ran the sweep on the prototype and the laptop posture reads cleanly at 120°. Can we keep the wedge label on a soft capsule?', a: 'sweep-120.mov' },
+    { n: 'Developer Program', i: 'DP', c: '#5B52E8', s: 'Your build is ready', p: 'Build 27.1 (4) finished processing and is available for testing on foldable devices in your internal group.', a: 'release-notes.pdf' },
+    { n: 'Sam Ortiz', i: 'SO', c: '#D9822B', s: 'Split ratio feedback', p: 'The slider inside the card fights me while I drag. Could the ratio live on the seam, or next to the axes picker?', a: 'markup.png' }
+  ];
+  var sel = 0;
+  function renderMail() {
+    $('#c-list').innerHTML = mails.map(function (m, k) {
+      return '<button type="button" class="c-row" role="option" data-k="' + k + '" aria-selected="' + (k === sel) + '">' +
+        '<span class="c-av" style="background:' + m.c + '">' + m.i + '</span>' +
+        '<span class="c-txt"><b>' + m.n + '</b><span>' + m.s + '</span></span></button>';
+    }).join('');
+    var m = mails[sel];
+    $('#c-read').innerHTML = '<h5>' + m.s + '</h5><div class="c-from"><span class="c-av" style="background:' + m.c + ';width:20px;height:20px;font-size:9px">' + m.i + '</span>' + m.n + '</div><p>' + m.p +
+      '</p><span class="c-att"><svg class="ico" aria-hidden="true" style="width:13px;height:13px"><use href="#i-clip"/></svg>' + m.a + '</span>';
+  }
+  $('#c-list').addEventListener('click', function (e) {
+    var row = e.target.closest('.c-row'); if (!row) return;
+    sel = +row.getAttribute('data-k'); renderMail();
+  });
+
+  function layoutSeams() {
+    $$('.fold[data-seam]').forEach(function (f) {
+      var p = $('.pane.p', f).getBoundingClientRect(), s = $('.pane.s', f).getBoundingClientRect(), fr = f.getBoundingClientRect();
+      var v = state.axis === 'horizontal' ? ((p.right + s.left) / 2 - fr.left) : ((p.bottom + s.top) / 2 - fr.top);
+      f.style.setProperty('--seam', v.toFixed(1) + 'px');
+    });
+  }
+
+  function render() {
+    var r = state.ratio;
+    app.setAttribute('data-axis', state.axis);
+    app.style.setProperty('--r', (r / 100).toFixed(2));
+    ratioEl.value = r;
+    $('#ratio-out').textContent = r + '%';
+    $$('.seg button').forEach(function (b) { b.setAttribute('aria-checked', String(b.getAttribute('data-axis') === state.axis)); });
+    var text = {
+      ax: state.axis, rp: r, rs: 100 - r,
+      rd: (r / 100).toFixed(2), rdr: ((100 - r) / 100).toFixed(2),
+      dim: state.axis === 'horizontal' ? 'width' : 'height'
+    };
+    $$('[data-bind]').forEach(function (el) { el.textContent = text[el.getAttribute('data-bind')]; });
+    var h = $('#d-handle'); h.setAttribute('aria-valuenow', r);
+    requestAnimationFrame(layoutSeams);
+  }
+  function setRatio(v) { state.ratio = clamp(Math.round(v), 20, 80); render(); }
+
+  ratioEl.addEventListener('input', function () { setRatio(+ratioEl.value); });
+  $$('.seg button').forEach(function (b) {
+    b.addEventListener('click', function () { state.axis = b.getAttribute('data-axis'); render(); });
+  });
+
+  // D: drag the seam handle. Pane margins are 6px on each side, so the seam sits at 12 + r * (size - 24).
+  var handle = $('#d-handle'), dFold = $('#d-fold'), dragging = false;
+  handle.addEventListener('pointerdown', function (e) { dragging = true; handle.setPointerCapture(e.pointerId); });
+  handle.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var r = dFold.getBoundingClientRect();
+    var v = state.axis === 'horizontal' ? (e.clientX - r.left - 12) / (r.width - 24) : (e.clientY - r.top - 12) / (r.height - 24);
+    setRatio(v * 100);
+  });
+  ['pointerup', 'pointercancel'].forEach(function (ev) { handle.addEventListener(ev, function () { dragging = false; }); });
+  handle.addEventListener('keydown', function (e) {
+    var step = e.shiftKey ? 5 : 1, k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowDown') { setRatio(state.ratio + step); e.preventDefault(); }
+    if (k === 'ArrowLeft' || k === 'ArrowUp') { setRatio(state.ratio - step); e.preventDefault(); }
+  });
+
+  if (window.ResizeObserver) { $$('.fold[data-seam]').forEach(function (f) { new ResizeObserver(layoutSeams).observe(f); }); }
+  window.addEventListener('resize', layoutSeams);
+  renderMail();
+  render();
+})();
+</script>

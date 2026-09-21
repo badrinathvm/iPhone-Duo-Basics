@@ -1,0 +1,723 @@
+<title>Hinge Angle Designs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F3F3F9;
+  --surface: #FFFFFF;
+  --surface-2: #F7F7FC;
+  --ink: #15152B;
+  --ink-2: #55556E;
+  --ink-3: #85859E;
+  --line: #E1E1EE;
+  --accent: #5856D6;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E9E8FB;
+  --st-closed: #6E6E7C;
+  --st-partial: #B86A00;
+  --st-open: #248A45;
+  --screen: #FFFFFF;
+  --track: #E8E8F3;
+  --g1: #7B79F5;
+  --g2: #5A52DF;
+  --glass: rgba(255, 255, 255, .58);
+  --glass-line: rgba(255, 255, 255, .8);
+  --blob1: #BDBAFF;
+  --blob2: #FFD5AE;
+  --blob3: #A9EFD3;
+  --shadow: 0 1px 2px rgba(20, 20, 60, .05), 0 10px 28px rgba(20, 20, 60, .06);
+  --display: "Bricolage Grotesque", "Avenir Next", "Helvetica Neue", sans-serif;
+  --body: "DM Sans", -apple-system, "Helvetica Neue", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --ui: -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "SF Pro Display", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C0C14;
+    --surface: #161622;
+    --surface-2: #1C1C2B;
+    --ink: #EEEEFA;
+    --ink-2: #A9A9C4;
+    --ink-3: #7A7A96;
+    --line: #2A2A3D;
+    --accent: #8E8CFF;
+    --accent-ink: #0C0C14;
+    --accent-soft: #25254A;
+    --st-closed: #7E7E8E;
+    --st-partial: #D98A0F;
+    --st-open: #2FA35A;
+    --screen: #0F0F19;
+    --track: #26263A;
+    --g1: #8F8DFF;
+    --g2: #6660F0;
+    --glass: rgba(34, 34, 56, .55);
+    --glass-line: rgba(255, 255, 255, .14);
+    --blob1: #3A36A8;
+    --blob2: #7A4A1E;
+    --blob3: #1B6A55;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px rgba(0, 0, 0, .35);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C0C14;
+  --surface: #161622;
+  --surface-2: #1C1C2B;
+  --ink: #EEEEFA;
+  --ink-2: #A9A9C4;
+  --ink-3: #7A7A96;
+  --line: #2A2A3D;
+  --accent: #8E8CFF;
+  --accent-ink: #0C0C14;
+  --accent-soft: #25254A;
+  --st-closed: #7E7E8E;
+  --st-partial: #D98A0F;
+  --st-open: #2FA35A;
+  --screen: #0F0F19;
+  --track: #26263A;
+  --g1: #8F8DFF;
+  --g2: #6660F0;
+  --glass: rgba(34, 34, 56, .55);
+  --glass-line: rgba(255, 255, 255, .14);
+  --blob1: #3A36A8;
+  --blob2: #7A4A1E;
+  --blob3: #1B6A55;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px rgba(0, 0, 0, .35);
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.55;
+  padding-inline: 16px;
+  padding-block: 28px 64px;
+}
+.wrap { max-width: 1240px; margin-inline: auto; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; letter-spacing: -0.015em; margin: 0; }
+h1 { font-size: clamp(30px, 5.2vw, 46px); font-weight: 800; line-height: 1.05; letter-spacing: -0.025em; }
+h2 { font-size: clamp(22px, 3.2vw, 28px); font-weight: 700; }
+h3 { font-size: 19px; font-weight: 700; }
+p { margin: 0; }
+code, .mono { font-family: var(--mono); font-size: .86em; }
+code { background: var(--accent-soft); color: var(--ink); padding: 1px 6px; border-radius: 6px; }
+.eyebrow { font-size: 12px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+.intro { display: grid; gap: 14px; max-width: 68ch; }
+.intro p { color: var(--ink-2); }
+.note { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; color: var(--ink-2); }
+.note b { color: var(--ink); font-weight: 600; }
+
+/* status colour flows through --sc from any element carrying data-s */
+[data-s="closed"] { --sc: var(--st-closed); }
+[data-s="partial"] { --sc: var(--st-partial); }
+[data-s="open"] { --sc: var(--st-open); }
+
+.ico { width: 1.25em; height: 1.25em; flex: none; }
+
+/* control bar */
+.bar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+  margin-block: 22px 26px;
+  padding: 12px 16px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+.bar label { font-weight: 600; font-size: 13px; }
+.bar input[type="range"] { flex: 1 1 220px; min-width: 0; accent-color: var(--accent); height: 28px; }
+.bar output { font-family: var(--mono); font-weight: 500; min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px 5px 9px; border-radius: 999px;
+  background: var(--sc); color: #fff; font-size: 13px; font-weight: 600;
+  transition: background .25s;
+}
+button {
+  font: inherit; font-weight: 600; font-size: 13px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+}
+button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* option cards */
+.grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr)); }
+.opt {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+  padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow);
+  min-width: 0;
+}
+.opt.rec { border-color: var(--accent); }
+.opt-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.letter {
+  width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+  background: var(--accent); color: var(--accent-ink); font: 800 15px var(--display);
+}
+.tag { font-size: 12px; font-weight: 600; color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--line); padding: 2px 9px; border-radius: 999px; }
+.tag.rec { background: var(--accent-soft); color: var(--ink); border-color: transparent; }
+.stage {
+  background: var(--screen); border: 1px solid var(--line); border-radius: 22px;
+  min-height: 372px; padding: 18px; display: grid; place-items: center; position: relative; overflow: hidden;
+  font-family: var(--ui);
+}
+.meta { display: grid; gap: 8px; margin: 0; font-size: 13.5px; }
+.meta > div { display: grid; grid-template-columns: 72px 1fr; gap: 10px; }
+.meta dt { color: var(--ink-3); font-size: 12px; text-transform: uppercase; letter-spacing: .07em; font-weight: 600; padding-top: 2px; }
+.meta dd { margin: 0; color: var(--ink-2); }
+.effort { display: inline-flex; gap: 3px; vertical-align: middle; margin-right: 8px; }
+.effort i { width: 9px; height: 9px; border-radius: 50%; background: var(--track); }
+.effort i.on { background: var(--accent); }
+.verdict { display: grid; gap: 4px; font-size: 13.5px; padding-top: 12px; border-top: 1px solid var(--line); }
+.verdict span { display: flex; gap: 8px; }
+.verdict b { flex: none; width: 1.1em; font-weight: 700; }
+.verdict .pro b { color: var(--st-open); }
+.verdict .con b { color: var(--st-partial); }
+
+/* --- shared 3D fold --- */
+.persp { perspective: 560px; }
+.scene { display: flex; transform-style: preserve-3d; transform: rotateX(-10deg) rotateY(var(--yaw, -22deg)); }
+.panel {
+  width: var(--pw, 84px); height: var(--ph, 112px);
+  background: linear-gradient(180deg, var(--g1), var(--g2));
+  display: grid; place-items: center; color: #fff;
+  font: 800 26px var(--ui);
+  filter: brightness(calc(1 - var(--foldn, 0) * .28));
+}
+.panel.l { border-radius: 20px 3px 3px 20px; transform-origin: 100% 50%; transform: rotateY(calc(var(--fold, 60deg) / 2)); }
+.panel.r { border-radius: 3px 20px 20px 3px; transform-origin: 0 50%; transform: rotateY(calc(var(--fold, 60deg) / -2)); }
+
+/* A */
+.col { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+.gauge { width: min(240px, 100%); height: auto; overflow: visible; }
+.gauge .trk { fill: none; stroke: var(--track); stroke-width: 16; stroke-linecap: round; }
+.gauge .prg { fill: none; stroke-width: 16; stroke-linecap: round; }
+.gauge .num { font: 800 42px var(--ui); fill: var(--ink); text-anchor: middle; font-variant-numeric: tabular-nums; }
+.gauge .sub { font: 500 11px var(--ui); fill: var(--ink-3); text-anchor: middle; }
+.s1 { stop-color: var(--g1); }
+.s2 { stop-color: var(--g2); }
+.chips { display: flex; gap: 8px; width: 100%; justify-content: center; }
+.chip {
+  flex: 1 1 0; max-width: 108px; min-width: 0; display: grid; justify-items: center; gap: 4px;
+  padding: 10px 6px; border-radius: 12px; background: var(--track); color: var(--ink-2);
+  font-size: 11px; font-weight: 600; text-align: center; transition: background .25s, color .25s;
+}
+.chip .ico { width: 22px; height: 22px; }
+.chip.on { background: var(--sc); color: #fff; }
+
+/* B */
+.prof { width: min(320px, 100%); height: auto; overflow: visible; }
+.prof text { font: 600 12px var(--ui); fill: var(--ink-2); paint-order: stroke; stroke: var(--screen); stroke-width: 4px; }
+.prof .lid { fill: var(--g2); }
+.prof .base { fill: var(--g1); }
+.prof .wedge { fill: var(--sc); fill-opacity: .22; stroke: var(--sc); stroke-width: 2; }
+.prof .ghost { stroke: var(--ink-3); stroke-width: 1.2; stroke-dasharray: 3 4; fill: none; }
+.prof .desk { stroke: var(--line); stroke-width: 2; }
+.prof .wlabel { font: 800 15px var(--ui); fill: var(--sc); }
+.read { display: grid; justify-items: center; gap: 2px; }
+.read strong { font: 800 30px var(--ui); font-variant-numeric: tabular-nums; }
+.read span { font-size: 13px; color: var(--ink-2); }
+
+/* C */
+.dial { width: min(330px, 100%); height: auto; overflow: visible; }
+.dial .trk { fill: none; stroke: var(--track); stroke-width: 5; stroke-linecap: round; }
+.dial .prg { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: round; }
+.dial .tk { stroke: var(--ink-3); stroke-width: 1.4; stroke-linecap: round; }
+.dial .tk.maj { stroke: var(--ink-2); stroke-width: 2; }
+.dial .tl { font: 500 9.5px var(--mono); fill: var(--ink-3); text-anchor: middle; }
+.dial .snap { font: 600 9.5px var(--ui); fill: var(--ink-2); letter-spacing: .05em; }
+.dial .needle { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+.dial .hub { fill: var(--ink); }
+.dial .peak { fill: var(--st-open); }
+.dial .low { fill: var(--ink-3); }
+.legend { display: flex; gap: 14px; font-size: 12.5px; color: var(--ink-2); flex-wrap: wrap; justify-content: center; }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+
+/* D */
+.hero { position: relative; width: 190px; height: 190px; }
+.hero svg.ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+.hero .trk { fill: none; stroke: var(--track); stroke-width: 12; }
+.hero .prg { fill: none; stroke: var(--sc); stroke-width: 12; stroke-linecap: round; transition: stroke .25s; }
+.hero .dico {
+  position: absolute; inset: 0; margin: auto; width: 64px; height: 64px; color: var(--sc);
+  opacity: 0; transform: scale(.7); transition: opacity .25s, transform .25s;
+}
+.hero .dico.on { opacity: 1; transform: none; }
+.strip { display: flex; gap: 2px; width: 100%; height: 22px; }
+.strip span { flex: 1 1 0; border-radius: 3px; background: var(--sc); min-width: 0; }
+.strip span.now { outline: 2px solid var(--ink); outline-offset: 1px; }
+.cap { font-size: 12px; color: var(--ink-3); display: flex; justify-content: space-between; width: 100%; }
+
+/* E */
+.stage.glass { background: var(--screen); align-content: center; }
+.stage.glass::before, .stage.glass::after { content: ""; position: absolute; border-radius: 50%; filter: blur(34px); opacity: .85; }
+.stage.glass::before { width: 190px; height: 190px; background: var(--blob1); top: -50px; left: -30px; }
+.stage.glass::after { width: 170px; height: 170px; background: var(--blob3); bottom: -40px; right: -20px; }
+.gcol { position: relative; z-index: 1; display: grid; gap: 10px; width: 100%; }
+.gc {
+  background: var(--glass); border: 1px solid var(--glass-line); border-radius: 20px; padding: 14px 16px;
+  backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);
+}
+.gc .lab { font-size: 11.5px; font-weight: 600; color: var(--ink-2); letter-spacing: .04em; }
+.gc .big { font: 800 44px var(--ui); line-height: 1; font-variant-numeric: tabular-nums; }
+.gc .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.spark { width: 100%; height: 64px; margin-top: 8px; overflow: visible; }
+.spark .gl { stroke: var(--ink-3); stroke-opacity: .35; stroke-dasharray: 2 4; stroke-width: 1; }
+.spark .ln { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; }
+.spark .end { fill: var(--accent); stroke: var(--screen); stroke-width: 2; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stats .gc { padding: 10px 14px; }
+.stats .v { font: 700 18px var(--ui); font-variant-numeric: tabular-nums; }
+
+/* F */
+.f3d { cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; display: grid; justify-items: center; gap: 16px; width: 100%; }
+.f3d:active { cursor: grabbing; }
+.f3d .persp { perspective: 720px; padding-block: 26px 6px; }
+.f3d .scene { transform: rotateX(var(--pitch, -14deg)) rotateY(var(--yaw, -28deg)); }
+.f3d .panel { --pw: 118px; --ph: 158px; border: 5px solid #1A1A26; font-size: 30px; position: relative; box-shadow: 0 10px 22px rgba(0, 0, 0, .18); }
+.f3d .panel.l { border-radius: 24px 4px 4px 24px; }
+.f3d .panel.r { border-radius: 4px 24px 24px 4px; }
+.f3d .cam { position: absolute; top: 10px; left: 12px; width: 8px; height: 8px; border-radius: 50%; background: #1A1A26; box-shadow: 0 0 0 2px rgba(255, 255, 255, .25); }
+.f3d .hinge { width: 9px; height: calc(158px - 18px); margin-block: 9px; background: linear-gradient(90deg, #8B8B9C, #D9D9E4 45%, #8B8B9C); border-radius: 4px; z-index: 1; }
+.hint { font-size: 12px; color: var(--ink-3); }
+
+/* empty state */
+.empty { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); margin-top: 16px; }
+.empty .stage { min-height: 210px; }
+.emp { display: grid; gap: 8px; justify-items: center; text-align: center; max-width: 250px; }
+.emp .ico { width: 44px; height: 44px; color: var(--ink-3); }
+.emp strong { font: 600 16px var(--ui); color: var(--ink); }
+.emp span { font-size: 13px; color: var(--ink-2); }
+.emp input[type="range"] { width: 100%; accent-color: var(--accent); }
+
+/* lower sections */
+section { margin-top: 56px; display: grid; gap: 14px; }
+.two { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 20px; display: grid; gap: 10px; align-content: start; }
+.card ul { margin: 0; padding-left: 18px; color: var(--ink-2); display: grid; gap: 6px; }
+.card li::marker { color: var(--ink-3); }
+.card p { color: var(--ink-2); }
+.files { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.files li { display: grid; gap: 2px; padding-left: 0; }
+.fh { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; font-weight: 600; min-width: 0; }
+.fh code { overflow-wrap: anywhere; }
+.files span { color: var(--ink-2); font-size: 13.5px; }
+pre {
+  margin: 0; overflow-x: auto; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px 14px; font: 400 12.5px/1.6 var(--mono); color: var(--ink);
+}
+@media (prefers-reduced-motion: reduce) {
+  .chip, .pill, .hero .prg, .hero .dico { transition: none; }
+}
+@media (max-width: 480px) {
+  .meta > div { grid-template-columns: 1fr; gap: 2px; }
+  .stage { padding: 14px; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10.5 18.6h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  <symbol id="i-laptop" viewBox="0 0 24 24"><rect x="5" y="5.5" width="14" height="9.5" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M2.5 18.5h19" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  <symbol id="i-tablet" viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M19 12h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-none" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 3.5l17 17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7.5 5.5h3.2v13H7.5zM13.3 5.5h3.2v13h-3.2z" fill="currentColor"/></symbol>
+</svg>
+
+<div class="wrap" id="app" data-s="partial">
+  <header class="intro">
+    <span class="eyebrow">iPhone Duo Basics · Hinge Angle screen</span>
+    <h1>Six ways to show the hinge angle</h1>
+    <p>Your screenshot is option A. B to F push the same reading (<code>angleDegrees</code> + <code>status</code>, and <code>history</code> where noted) in different directions. Drag the slider and every design below moves together, so you compare them at the same angle.</p>
+    <p class="note"><span><b>Nothing in the Swift project has changed.</b> Pick a letter and I'll build it.</span></p>
+  </header>
+
+  <div class="bar" role="group" aria-label="Preview controls">
+    <label for="angle">Hinge angle</label>
+    <input id="angle" type="range" min="0" max="180" step="1" value="120">
+    <output id="angle-out" for="angle">120°</output>
+    <span class="pill" id="bar-pill" data-s="partial"><svg class="ico" aria-hidden="true"><use id="bar-ico" href="#i-laptop"/></svg><span id="bar-txt">Partially Open</span></span>
+    <button id="sweep" type="button" aria-pressed="false"><svg class="ico" aria-hidden="true"><use id="sweep-ico" href="#i-play"/></svg><span id="sweep-txt">Sweep</span></button>
+  </div>
+
+  <main class="grid">
+    <!-- A -->
+    <article class="opt rec" id="opt-a">
+      <div class="opt-head"><span class="letter">A</span><h3>Fold + Gauge</h3><span class="tag rec">Recommended</span><span class="tag">Your screenshot, polished</span></div>
+      <div class="stage"><div class="col">
+        <div class="persp"><div class="scene" style="--yaw:-22deg"><div class="panel l">A</div><div class="panel r">B</div></div></div>
+        <svg class="gauge" viewBox="0 0 220 124" role="img" aria-label="Angle gauge from 0 to 180 degrees">
+          <defs><linearGradient id="gg" x1="0" x2="1" y1="0" y2="0"><stop class="s1" offset="0"/><stop class="s2" offset="1"/></linearGradient></defs>
+          <path class="trk" d="M20 110 A90 90 0 0 1 200 110" pathLength="100"/>
+          <path class="prg" id="a-arc" d="M20 110 A90 90 0 0 1 200 110" pathLength="100" stroke="url(#gg)" stroke-dasharray="66 100"/>
+          <text class="num" id="a-num" x="110" y="96">120°</text>
+          <text class="sub" id="a-rad" x="110" y="116">2.094 rad</text>
+        </svg>
+        <div class="chips" id="a-chips">
+          <div class="chip" data-s="closed"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>Closed</div>
+          <div class="chip" data-s="partial"><svg class="ico" aria-hidden="true"><use href="#i-laptop"/></svg>Partially Open</div>
+          <div class="chip" data-s="open"><svg class="ico" aria-hidden="true"><use href="#i-tablet"/></svg>Fully Open</div>
+        </div>
+      </div></div>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>Two panels that fold about the hinge, a 180° arc with big numerals and radians, three posture chips with the active one lit.</dd></div>
+        <div><dt>Data</dt><dd><code>angleDegrees</code>, <code>status</code></dd></div>
+        <div><dt>SwiftUI</dt><dd><code>rotation3DEffect</code> per panel, arc via <code>Circle().trim</code>, <code>.numericText</code> readout</dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>Medium</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Closest to your reference. No dependencies. Reads at a glance.</span><span class="con"><b>−</b>Picture and gauge both say the same thing.</span></div>
+    </article>
+
+    <!-- B -->
+    <article class="opt" id="opt-b">
+      <div class="opt-head"><span class="letter">B</span><h3>Laptop Profile</h3><span class="tag">Side view</span></div>
+      <div class="stage"><div class="col" data-s="partial" id="b-col">
+        <svg class="prof" viewBox="0 0 300 190" role="img" aria-label="Side view of the device opening to the current angle">
+          <line class="desk" x1="20" y1="158" x2="290" y2="158"/>
+          <g transform="translate(170 150)">
+            <line class="ghost" x1="0" y1="0" x2="0" y2="-118"/>
+            <text x="8" y="-104">90° laptop</text>
+            <line class="ghost" x1="0" y1="0" x2="118" y2="0"/>
+            <text x="116" y="-8" text-anchor="end">180° flat</text>
+            <path class="wedge" id="b-wedge" d=""/>
+            <rect class="base" x="-110" y="0" width="110" height="8" rx="4"/>
+            <g id="b-lid"><rect class="lid" x="-110" y="-8" width="110" height="8" rx="4"/></g>
+            <circle cx="0" cy="0" r="6" fill="var(--ink)"/>
+            <text class="wlabel" id="b-label" x="-40" y="-30" text-anchor="middle">120°</text>
+          </g>
+        </svg>
+        <div class="read"><strong id="b-txt">Partially Open</strong><span>lid opened to <span id="b-deg">120°</span></span></div>
+      </div></div>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>Two slabs on a hinge dot, an angle wedge labelled at the hinge, ghost guides at 90° and 180°.</dd></div>
+        <div><dt>Data</dt><dd><code>angleDegrees</code>, <code>status</code></dd></div>
+        <div><dt>SwiftUI</dt><dd><code>rotationEffect(anchor:)</code> on the lid, wedge as a <code>Shape</code> with <code>Path.addArc</code></dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>Medium</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Explains what the number means: laptop vs. flat.</span><span class="con"><b>−</b>A laptop metaphor for a foldable phone.</span></div>
+    </article>
+
+    <!-- C -->
+    <article class="opt" id="opt-c">
+      <div class="opt-head"><span class="letter">C</span><h3>Protractor Dial</h3><span class="tag">Instrument</span></div>
+      <div class="stage"><div class="col" id="c-col" data-s="partial">
+        <svg class="dial" viewBox="0 0 300 196" role="img" aria-label="Protractor dial with needle at the current angle">
+          <path class="trk" d="M38 150 A112 112 0 0 1 262 150" pathLength="100"/>
+          <path class="prg" id="c-arc" d="M38 150 A112 112 0 0 1 262 150" pathLength="100" stroke-dasharray="66 100"/>
+          <g id="c-ticks"></g>
+          <text class="snap" x="150" y="20" text-anchor="middle">LAPTOP 90°</text>
+          <text class="snap" x="30" y="174" text-anchor="start">CLOSED 0°</text>
+          <text class="snap" x="270" y="174" text-anchor="end">FLAT 180°</text>
+          <circle class="peak" id="c-peak" r="4.5" cx="150" cy="150"/>
+          <circle class="low" id="c-low" r="4.5" cx="150" cy="150"/>
+          <line class="needle" id="c-needle" x1="150" y1="150" x2="150" y2="72"/>
+          <circle class="hub" cx="150" cy="150" r="7"/>
+        </svg>
+        <div class="read"><strong id="c-num">120°</strong><span id="c-txt">Partially Open</span></div>
+        <div class="legend"><span><i class="peak" style="background:var(--st-open)"></i>Peak <b id="c-pk">165°</b></span><span><i style="background:var(--ink-3)"></i>Low <b id="c-lw">5°</b></span><span>last 40 readings</span></div>
+      </div></div>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>Protractor with ticks every 10°, a sweeping needle, snap labels at 0/90/180, and peak/low markers from recent history.</dd></div>
+        <div><dt>Data</dt><dd><code>angleDegrees</code>, <code>history</code></dd></div>
+        <div><dt>SwiftUI</dt><dd><code>Canvas</code> for ticks, <code>rotationEffect</code> needle, min/max over <code>state.history</code></dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span>Medium–High</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Most precise. Puts history to work.</span><span class="con"><b>−</b>Busiest. Tiny tick labels need Dynamic Type care.</span></div>
+    </article>
+
+    <!-- D -->
+    <article class="opt" id="opt-d">
+      <div class="opt-head"><span class="letter">D</span><h3>Posture Hero</h3><span class="tag">Glanceable</span></div>
+      <div class="stage"><div class="col" id="d-col" data-s="partial">
+        <div class="hero">
+          <svg class="ring" viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="trk" cx="100" cy="100" r="86"/>
+            <circle class="prg" id="d-ring" cx="100" cy="100" r="86" pathLength="100" stroke-dasharray="66 100"/>
+          </svg>
+          <svg class="dico" data-s="closed" aria-hidden="true"><use href="#i-phone"/></svg>
+          <svg class="dico" data-s="partial" aria-hidden="true"><use href="#i-laptop"/></svg>
+          <svg class="dico" data-s="open" aria-hidden="true"><use href="#i-tablet"/></svg>
+        </div>
+        <div class="read"><strong id="d-txt">Partially Open</strong><span id="d-deg">120° · in this posture <b id="d-since">0 s</b></span></div>
+        <div class="strip" id="d-strip" aria-label="Recent postures"></div>
+        <div class="cap"><span>40 readings ago</span><span>now</span></div>
+      </div></div>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>One large pictogram that morphs phone → laptop → tablet inside a progress ring, plus a coloured strip of recent postures.</dd></div>
+        <div><dt>Data</dt><dd><code>status</code>, <code>angleDegrees</code>, <code>history</code></dd></div>
+        <div><dt>SwiftUI</dt><dd>SF Symbols with <code>.symbolEffect(.replace)</code>, <code>Circle().trim</code> ring, a row of <code>Capsule</code>s</dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span>Low–Medium</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Simplest to read. The strip belongs on Hinge History.</span><span class="con"><b>−</b>The number takes second place.</span></div>
+    </article>
+
+    <!-- E -->
+    <article class="opt" id="opt-e">
+      <div class="opt-head"><span class="letter">E</span><h3>Glass Dashboard</h3><span class="tag">Liquid Glass</span></div>
+      <div class="stage glass" data-s="partial" id="e-stage"><div class="gcol">
+        <div class="gc">
+          <div class="row"><span class="lab">HINGE ANGLE</span><span class="pill" id="e-pill" data-s="partial"><span id="e-txt">Partially Open</span></span></div>
+          <div class="big" id="e-num">120°</div>
+          <svg class="spark" viewBox="0 0 260 70" preserveAspectRatio="none" aria-label="Angle over the last 40 readings">
+            <line class="gl" x1="0" x2="260" y1="66" y2="66"/><line class="gl" x1="0" x2="260" y1="36" y2="36"/><line class="gl" x1="0" x2="260" y1="6" y2="6"/>
+            <defs><linearGradient id="eg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" style="stop-color:var(--accent);stop-opacity:.35"/><stop offset="1" style="stop-color:var(--accent);stop-opacity:0"/></linearGradient></defs>
+            <path id="e-area" fill="url(#eg)" d=""/>
+            <path class="ln" id="e-line" d=""/>
+            <circle class="end" id="e-end" r="4" cx="0" cy="0"/>
+          </svg>
+        </div>
+        <div class="stats">
+          <div class="gc"><div class="lab">POSTURE</div><div class="v" id="e-post">Partially Open</div></div>
+          <div class="gc"><div class="lab">RADIANS</div><div class="v" id="e-rad">2.094</div></div>
+          <div class="gc"><div class="lab">PEAK</div><div class="v" id="e-peak">165°</div></div>
+          <div class="gc"><div class="lab">IN POSTURE</div><div class="v" id="e-since">0 s</div></div>
+        </div>
+      </div></div>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>A glass hero card with the angle and a live sparkline, plus stat tiles: posture, radians, peak, time in posture.</dd></div>
+        <div><dt>Data</dt><dd><code>angleDegrees</code>, <code>history</code>, timestamps</dd></div>
+        <div><dt>SwiftUI</dt><dd>Liquid Glass containers, Swift Charts <code>AreaMark</code> + <code>LineMark</code></dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span>High</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Feels native to the newest iOS. Shows the trend.</span><span class="con"><b>−</b>Overlaps the History screen. Most data-hungry.</span></div>
+    </article>
+
+    <!-- F -->
+    <article class="opt" id="opt-f">
+      <div class="opt-head"><span class="letter">F</span><h3>3D Device</h3><span class="tag">Stretch goal</span></div>
+      <div class="stage"><div class="f3d" id="f-stage" data-s="partial">
+        <div class="persp"><div class="scene" id="f-scene">
+          <div class="panel l"><span class="cam"></span>A</div>
+          <div class="hinge"></div>
+          <div class="panel r">B</div>
+        </div></div>
+        <div class="read"><strong id="f-num">120°</strong><span class="hint">Drag to orbit</span></div>
+      </div></div>
+      <dl class="meta">
+        <div><dt>Shows</dt><dd>A true 3D two-panel device that folds with the hinge. This matches the catalog line "mirror it in a 3D model of the device".</dd></div>
+        <div><dt>Data</dt><dd><code>angleDegrees</code></dd></div>
+        <div><dt>SwiftUI</dt><dd><code>RealityView</code>, two procedural box entities and a joint. No assets needed.</dd></div>
+        <div><dt>Effort</dt><dd><span class="effort" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>Highest</dd></div>
+      </dl>
+      <div class="verdict"><span class="pro"><b>+</b>Delivers the catalog promise literally. Fun to touch.</span><span class="con"><b>−</b>Hardest to preview and test. Heaviest.</span></div>
+    </article>
+  </main>
+
+  <section aria-labelledby="empty-h">
+    <h2 id="empty-h">When there's no hinge</h2>
+    <p style="color:var(--ink-2);max-width:66ch">Most people (and every current simulator) have no hinge, so <code>state.current</code> is <code>nil</code>. Whatever you pick needs to look intentional here. Two treatments:</p>
+    <div class="empty">
+      <div><span class="eyebrow">Empty state</span><div class="stage" style="margin-top:8px"><div class="emp"><svg class="ico" aria-hidden="true"><use href="#i-none"/></svg><strong>No hinge on this device</strong><span>The hinge angle appears here on a foldable iPhone.</span></div></div></div>
+      <div><span class="eyebrow">Demo mode (optional)</span><div class="stage" style="margin-top:8px"><div class="emp"><svg class="ico" aria-hidden="true" style="color:var(--accent)"><use href="#i-laptop"/></svg><strong>Demo mode</strong><span>No hinge found. Drag to explore the design with a simulated angle.</span><input id="angle2" type="range" min="0" max="180" step="1" value="120" aria-label="Demo hinge angle"></div></div></div>
+    </div>
+  </section>
+
+  <section class="two" aria-labelledby="rec-h">
+    <div class="card">
+      <h2 id="rec-h">Recommendation</h2>
+      <p><b>Build A first.</b> It stays closest to your screenshot, needs no framework beyond SwiftUI, and its folding panels give the "3D model" feel the catalog already promises.</p>
+      <ul>
+        <li>Move D's posture strip to the <b>Hinge History</b> screen, where <code>history</code> belongs.</li>
+        <li>Keep F as a later upgrade once A is solid.</li>
+        <li>C and E are worth borrowing from (peak/low markers, sparkline) rather than building whole.</li>
+      </ul>
+      <pre><code>// fold = 180 - angleDegrees   (sign to confirm in a preview)
+HStack(spacing: 0) {
+  panel("A").rotation3DEffect(.degrees(fold / 2), axis: (0, 1, 0),
+                              anchor: .trailing, perspective: 0.6)
+  panel("B").rotation3DEffect(.degrees(-fold / 2), axis: (0, 1, 0),
+                              anchor: .leading, perspective: 0.6)
+}</code></pre>
+    </div>
+    <div class="card">
+      <h2>What changes in the project</h2>
+      <ul class="files">
+        <li><div class="fh"><code>View/HingeAngleView.swift</code></div><span>Becomes the screen: composes the pieces below and handles the <code>nil</code> reading state.</span></li>
+        <li><div class="fh"><code>View/HingeFoldTile.swift</code><code>View/HingeArcGauge.swift</code><code>View/HingePostureChips.swift</code></div><span>New views for option A. <code>HingeBadge</code> stays for the sidebar header.</span></li>
+        <li><div class="fh"><code>Utils/Hinge+Display.swift</code></div><span>Adds <code>angleRadians</code>, a clamped <code>progress</code> (angle ÷ 180) and a radians string. Reuses the existing <code>HingeStatus</code> title, symbol and colour.</span></li>
+        <li><div class="fh"><code>#Preview</code> blocks</div><span>A slider-driven harness that builds <code>HingeReading</code> directly, so previews work with no foldable and without the 27.1 SDK.</span></li>
+        <li><div class="fh">Animation</div><span><code>.smooth</code> on the reading so tile, gauge and chips move together. Reduce Motion turns off the 3D swing.</span></li>
+        <li><div class="fh"><code>Domain/</code><code>Actions/</code><code>Data/</code></div><span>No changes.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="ass-h">
+    <h2 id="ass-h">Assumptions to confirm</h2>
+    <div class="card">
+      <ul>
+        <li>The hinge range is 0–180°, as in your screenshot. I'll check the real <code>DeviceHinge</code> docs on the 27.1 SDK and clamp to the true range.</li>
+        <li>The posture cut-offs in this page (closed under 10°, fully open from 170°) are placeholders. The app uses the SDK's own <code>status</code>.</li>
+        <li>The <code>rotation3DEffect</code> signs and perspective value need confirming in an Xcode preview. The code above is a sketch, not compiled.</li>
+        <li>Should the screen offer demo mode when there's no hinge, or just the empty state?</li>
+        <li>These mockups are HTML/CSS/SVG design targets, so SwiftUI rendering will differ in detail.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var clamp = function (v, lo, hi) { return Math.min(hi, Math.max(lo, v)); };
+  var NAMES = { closed: 'Closed', partial: 'Partially Open', open: 'Fully Open' };
+  var ICONS = { closed: 'i-phone', partial: 'i-laptop', open: 'i-tablet' };
+  var stOf = function (a) { return a < 10 ? 'closed' : a >= 170 ? 'open' : 'partial'; };
+  var N = 40;
+
+  var app = $('app'), slider = $('angle'), slider2 = $('angle2');
+  var angle = 120, since = Date.now();
+  var hist = [];
+  for (var i = 0; i < N; i++) hist.push(Math.round(85 + 80 * Math.sin(i * 0.32 - 0.6)));
+
+  function view() { return hist.concat(angle).slice(-N); }
+  function record(a) {
+    var last = hist[hist.length - 1];
+    if (last === undefined || Math.abs(a - last) >= 3 || stOf(a) !== stOf(last)) {
+      hist.push(a);
+      if (hist.length > N) hist.shift();
+    }
+  }
+  function polar(cx, cy, r, a) {           // 0° points left, 90° up, 180° right
+    var t = a * Math.PI / 180;
+    return [cx - r * Math.cos(t), cy - r * Math.sin(t)];
+  }
+  function f1(n) { return n.toFixed(1); }
+
+  // static: protractor ticks
+  (function () {
+    var g = $('c-ticks'), NS = 'http://www.w3.org/2000/svg', out = '';
+    for (var t = 0; t <= 180; t += 10) {
+      var major = t % 30 === 0, p1 = polar(150, 150, major ? 96 : 103, t), p2 = polar(150, 150, 109, t);
+      out += '<line class="tk' + (major ? ' maj' : '') + '" x1="' + f1(p1[0]) + '" y1="' + f1(p1[1]) + '" x2="' + f1(p2[0]) + '" y2="' + f1(p2[1]) + '"/>';
+      if (major) {
+        var pl = polar(150, 150, 82, t);
+        out += '<text class="tl" x="' + f1(pl[0]) + '" y="' + f1(pl[1] + 3) + '">' + t + '</text>';
+      }
+    }
+    g.innerHTML = out;
+  })();
+
+  function render() {
+    var a = angle, s = stOf(a), rad = a * Math.PI / 180, fold = 180 - a, v = view();
+    var pk = Math.max.apply(null, v), lw = Math.min.apply(null, v);
+    var secs = Math.round((Date.now() - since) / 1000) + ' s';
+
+    app.style.setProperty('--fold', fold + 'deg');
+    app.style.setProperty('--foldn', (fold / 180).toFixed(3));
+    slider.value = a; slider2.value = a;
+    $('angle-out').textContent = a + '°';
+    $('bar-pill').setAttribute('data-s', s);
+    $('bar-txt').textContent = NAMES[s];
+    $('bar-ico').setAttribute('href', '#' + ICONS[s]);
+
+    // A
+    $('a-arc').setAttribute('stroke-dasharray', (a / 180 * 100) + ' 100');
+    $('a-num').textContent = a + '°';
+    $('a-rad').textContent = rad.toFixed(3) + ' rad';
+    [].forEach.call($('a-chips').children, function (c) { c.classList.toggle('on', c.getAttribute('data-s') === s); });
+
+    // B
+    $('b-col').setAttribute('data-s', s);
+    $('b-lid').setAttribute('transform', 'rotate(' + a + ')');
+    var r = 44, e = polar(0, 0, r, a), lp = polar(0, 0, r + 26, a / 2);
+    $('b-wedge').setAttribute('d', a < 1 ? '' : 'M0 0 L' + (-r) + ' 0 A' + r + ' ' + r + ' 0 0 1 ' + f1(e[0]) + ' ' + f1(e[1]) + ' Z');
+    $('b-label').setAttribute('x', f1(lp[0])); $('b-label').setAttribute('y', f1(lp[1] + 5));
+    $('b-label').textContent = a + '°';
+    $('b-txt').textContent = NAMES[s]; $('b-deg').textContent = a + '°';
+
+    // C
+    $('c-col').setAttribute('data-s', s);
+    $('c-arc').setAttribute('stroke-dasharray', (a / 180 * 100) + ' 100');
+    var n = polar(150, 150, 78, a);
+    $('c-needle').setAttribute('x2', f1(n[0])); $('c-needle').setAttribute('y2', f1(n[1]));
+    var pp = polar(150, 150, 123, pk), lp2 = polar(150, 150, 123, lw);
+    $('c-peak').setAttribute('cx', f1(pp[0])); $('c-peak').setAttribute('cy', f1(pp[1]));
+    $('c-low').setAttribute('cx', f1(lp2[0])); $('c-low').setAttribute('cy', f1(lp2[1]));
+    $('c-num').textContent = a + '°'; $('c-txt').textContent = NAMES[s];
+    $('c-pk').textContent = pk + '°'; $('c-lw').textContent = lw + '°';
+
+    // D
+    $('d-col').setAttribute('data-s', s);
+    $('d-ring').setAttribute('stroke-dasharray', (a / 180 * 100) + ' 100');
+    [].forEach.call(document.querySelectorAll('.dico'), function (d) { d.classList.toggle('on', d.getAttribute('data-s') === s); });
+    $('d-txt').textContent = NAMES[s];
+    $('d-deg').firstChild.nodeValue = a + '° · in this posture ';
+    $('d-since').textContent = secs;
+    $('d-strip').innerHTML = v.map(function (x, i) {
+      return '<span data-s="' + stOf(x) + '"' + (i === v.length - 1 ? ' class="now"' : '') + '></span>';
+    }).join('');
+
+    // E
+    $('e-stage').setAttribute('data-s', s); $('e-pill').setAttribute('data-s', s);
+    $('e-txt').textContent = NAMES[s]; $('e-num').textContent = a + '°';
+    $('e-post').textContent = NAMES[s]; $('e-rad').textContent = rad.toFixed(3);
+    $('e-peak').textContent = pk + '°'; $('e-since').textContent = secs;
+    var pts = v.map(function (x, i) { return [i / (v.length - 1) * 260, 66 - x / 180 * 60]; });
+    var d = 'M' + pts.map(function (p) { return f1(p[0]) + ' ' + f1(p[1]); }).join(' L');
+    $('e-line').setAttribute('d', d);
+    $('e-area').setAttribute('d', d + ' L260 70 L0 70 Z');
+    var lastPt = pts[pts.length - 1];
+    $('e-end').setAttribute('cx', f1(lastPt[0])); $('e-end').setAttribute('cy', f1(lastPt[1]));
+
+    // F
+    $('f-stage').setAttribute('data-s', s); $('f-num').textContent = a + '°';
+  }
+
+  function setAngle(a) {
+    a = clamp(Math.round(a), 0, 180);
+    if (stOf(a) !== stOf(angle)) since = Date.now();
+    angle = a; record(a); render();
+  }
+
+  slider.addEventListener('input', function () { stopSweep(); setAngle(+slider.value); });
+  slider2.addEventListener('input', function () { stopSweep(); setAngle(+slider2.value); });
+
+  // sweep
+  var raf = 0, sweeping = false, t0 = 0, PERIOD = 7000;
+  var btn = $('sweep');
+  function tick(ts) {
+    var p = ((ts - t0) / PERIOD) % 1;
+    setAngle(90 - 90 * Math.cos(p * 2 * Math.PI));
+    raf = requestAnimationFrame(tick);
+  }
+  function startSweep() {
+    sweeping = true;
+    var ph0 = Math.acos(clamp((90 - angle) / 90, -1, 1)) / (2 * Math.PI);
+    t0 = performance.now() - ph0 * PERIOD;
+    raf = requestAnimationFrame(tick);
+    btn.setAttribute('aria-pressed', 'true');
+    $('sweep-ico').setAttribute('href', '#i-pause'); $('sweep-txt').textContent = 'Pause';
+  }
+  function stopSweep() {
+    if (!sweeping) return;
+    sweeping = false; cancelAnimationFrame(raf);
+    btn.setAttribute('aria-pressed', 'false');
+    $('sweep-ico').setAttribute('href', '#i-play'); $('sweep-txt').textContent = 'Sweep';
+  }
+  btn.addEventListener('click', function () { sweeping ? stopSweep() : startSweep(); });
+
+  // F: drag to orbit
+  var fs = $('f-stage'), scene = $('f-scene'), yaw = -28, pitch = -14, drag = null;
+  fs.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, yaw: yaw, pitch: pitch }; fs.setPointerCapture(e.pointerId); });
+  fs.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    yaw = clamp(drag.yaw + (e.clientX - drag.x) * 0.45, -75, 75);
+    pitch = clamp(drag.pitch - (e.clientY - drag.y) * 0.3, -40, 20);
+    scene.style.setProperty('--yaw', yaw + 'deg'); scene.style.setProperty('--pitch', pitch + 'deg');
+  });
+  var end = function () { drag = null; };
+  fs.addEventListener('pointerup', end); fs.addEventListener('pointercancel', end);
+
+  render();
+  setInterval(function () { if (!sweeping) render(); }, 1000);
+})();
+</script>
