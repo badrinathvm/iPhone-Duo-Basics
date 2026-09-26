@@ -40,6 +40,7 @@ struct CatalogComposer {
         case .avoidDivision: AvoidDivisionView()
         case .foldedUnfolded: FoldUnFoldedView()
         case .verticalToolbar: VerticalToolBarView()
+        case .containerMargins: ContainerMarginsView()
         }
     }
 }
