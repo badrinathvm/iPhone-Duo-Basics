@@ -13,7 +13,7 @@ enum DuoSection: String, CaseIterable, Identifiable {
     case reservedRegions = "Reserved Regions"
     case arrangements = "Arrangements"
 //    case barsAndMargins = "Bars And Margins"
-//    case adaptivity = "Adaptivity"
+    case adaptivity = "Adaptivity"
 
     var id: Self { self }
 
@@ -31,6 +31,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
     case overlayArrangement
     case tabletop
     case evenColumns
+    case foldedUnfolded
 
     var id: Self { self }
 
@@ -39,6 +40,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
         case .hingeAngle, .hingeHistory: .hinge
         case .splitArrangement, .overlayArrangement: .arrangements
         case .reservedRegions, .tabletop, .evenColumns, .avoidDivision: .reservedRegions
+        case .foldedUnfolded: .adaptivity
         }
     }
 
@@ -52,6 +54,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
         case .tabletop: "Tabletop & Book"
         case .evenColumns: "Even Columns"
         case .avoidDivision: "Avoid the Crease"
+        case .foldedUnfolded: "Folded & Unfolded"
         }
     }
 
@@ -73,6 +76,8 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
             "Use the inactive division region to give a grid an even number of columns with a gutter over the fold."
         case .overlayArrangement:
             "Float a panel over full-bleed content and collapse it with overlayArrangementZIndex while it covers the content."
+        case .foldedUnfolded:
+            "React to size changes when the device folds and unfolds using size classes and container size."
         }
     }
 
@@ -88,7 +93,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
         case .overlayArrangement: "square.on.square"
 //        case .verticalToolbar: "sidebar.left"
 //        case .containerMargins: "square.dashed.inset.filled"
-//        case .foldedUnfolded: "arrow.left.and.right.square"
+        case .foldedUnfolded: "arrow.left.and.right.square"
         }
     }
     
@@ -104,7 +109,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
         case .overlayArrangement: ["ArrangementView", "arrangementViewStyle(.overlay)", "overlayArrangementEdge(_:)", "overlayArrangementZIndex"]
    //     case .verticalToolbar: ["toolbarVerticalBehavior(_:)", "toolbarVerticalCompressionBehavior(_:)", "axisBehavior(_:)", "visibilityPriority(_:)", "ToolbarOverflowMenu", "toolbarVerticalEdge"]
   //      case .containerMargins: ["contentMargins(for:edges:alignment:)", "ContentMarginGuide.container", "GeometryProxy.contentMargins(for:)"]
- //       case .foldedUnfolded: ["horizontalSizeClass", "onGeometryChange(for:of:action:)"]
+        case .foldedUnfolded: ["horizontalSizeClass", "onGeometryChange(for:of:action:)"]
         }
     }
     
@@ -113,8 +118,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
         case .hinge: .indigo
         case .reservedRegions: .pink
         case .arrangements: .teal
-//        case .barsAndMargins: .orange
-//        case .adaptivity: .green
+        case .adaptivity: .green
         }
     }
 }

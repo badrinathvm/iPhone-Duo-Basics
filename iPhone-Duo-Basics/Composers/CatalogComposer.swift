@@ -38,6 +38,7 @@ struct CatalogComposer {
         case .evenColumns: EvenColumnsView()
         case .overlayArrangement: OverlayArrangementView()
         case .avoidDivision: AvoidDivisionView()
+        case .foldedUnfolded: FoldUnFoldedView()
         }
     }
 }
