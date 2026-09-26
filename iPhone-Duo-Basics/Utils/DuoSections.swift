@@ -12,7 +12,7 @@ enum DuoSection: String, CaseIterable, Identifiable {
     case hinge = "Hinge"
     case reservedRegions = "Reserved Regions"
     case arrangements = "Arrangements"
-//    case barsAndMargins = "Bars And Margins"
+    case barsAndMargins = "Bars And Margins"
     case adaptivity = "Adaptivity"
 
     var id: Self { self }
@@ -32,6 +32,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
     case tabletop
     case evenColumns
     case foldedUnfolded
+    case verticalToolbar
 
     var id: Self { self }
 
@@ -41,6 +42,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
         case .splitArrangement, .overlayArrangement: .arrangements
         case .reservedRegions, .tabletop, .evenColumns, .avoidDivision: .reservedRegions
         case .foldedUnfolded: .adaptivity
+        case .verticalToolbar: .barsAndMargins
         }
     }
 
@@ -55,6 +57,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
         case .evenColumns: "Even Columns"
         case .avoidDivision: "Avoid the Crease"
         case .foldedUnfolded: "Folded & Unfolded"
+        case .verticalToolbar: "Vertical Toolbar"
         }
     }
 
@@ -78,6 +81,8 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
             "Float a panel over full-bleed content and collapse it with overlayArrangementZIndex while it covers the content."
         case .foldedUnfolded:
             "React to size changes when the device folds and unfolds using size classes and container size."
+        case .verticalToolbar:
+            "Control the vertical bar: opt out, choose compression behavior and item axis behavior."
         }
     }
 
@@ -91,7 +96,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
         case .evenColumns: "square.grid.2x2"
         case .splitArrangement: "rectangle.split.2x1"
         case .overlayArrangement: "square.on.square"
-//        case .verticalToolbar: "sidebar.left"
+        case .verticalToolbar: "sidebar.left"
 //        case .containerMargins: "square.dashed.inset.filled"
         case .foldedUnfolded: "arrow.left.and.right.square"
         }
@@ -107,7 +112,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
         case .evenColumns: ["GeometryProxy.reservedRegions(kind:options:)", "ReservedRegion.QueryOptions.includeInactive"]
         case .splitArrangement: ["ArrangementView", "arrangementViewStyle(.split)", "splitArrangementLayoutRatio(_:)", "splitArrangementAxis"]
         case .overlayArrangement: ["ArrangementView", "arrangementViewStyle(.overlay)", "overlayArrangementEdge(_:)", "overlayArrangementZIndex"]
-   //     case .verticalToolbar: ["toolbarVerticalBehavior(_:)", "toolbarVerticalCompressionBehavior(_:)", "axisBehavior(_:)", "visibilityPriority(_:)", "ToolbarOverflowMenu", "toolbarVerticalEdge"]
+        case .verticalToolbar: ["toolbarVerticalBehavior(_:)", "toolbarVerticalCompressionBehavior(_:)", "axisBehavior(_:)", "visibilityPriority(_:)", "ToolbarOverflowMenu", "toolbarVerticalEdge"]
   //      case .containerMargins: ["contentMargins(for:edges:alignment:)", "ContentMarginGuide.container", "GeometryProxy.contentMargins(for:)"]
         case .foldedUnfolded: ["horizontalSizeClass", "onGeometryChange(for:of:action:)"]
         }
@@ -119,6 +124,7 @@ enum Duo: String, CaseIterable, Identifiable, Hashable {
         case .reservedRegions: .pink
         case .arrangements: .teal
         case .adaptivity: .green
+        case .barsAndMargins: .orange
         }
     }
 }

@@ -39,6 +39,7 @@ struct CatalogComposer {
         case .overlayArrangement: OverlayArrangementView()
         case .avoidDivision: AvoidDivisionView()
         case .foldedUnfolded: FoldUnFoldedView()
+        case .verticalToolbar: VerticalToolBarView()
         }
     }
 }
