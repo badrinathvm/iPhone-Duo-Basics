@@ -33,6 +33,11 @@ struct CatalogComposer {
         case .hingeAngle:  HingeAngleView(state: state)
         case .hingeHistory: HingeHistoryView(state: state)
         case .splitArrangement: SplitArrangementView()
+        case .reservedRegions: EmptyView()
+        case .tabletop: TableTopView()
+        case .evenColumns: EvenColumnsView()
+        case .overlayArrangement: OverlayArrangementView()
+        case .avoidDivision: AvoidDivisionView()
         }
     }
 }
